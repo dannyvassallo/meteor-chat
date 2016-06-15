@@ -11,7 +11,7 @@ For Windows:
 Visit: https://www.meteor.com/install
 ```
 
-### Step 1: Create and start your project
+### Step 2: Create and start your project
 ```
 meteor create meteor-chat
 cd meteor-chat
@@ -22,7 +22,7 @@ meteor
 Visit: http://localhost:3000/
 ```
 
-### Step 2: Strip Out Boilerplate
+### Step 3: Strip Out Boilerplate
 
 Replace existing content with the following:
 
@@ -74,7 +74,7 @@ Template.home.events({
 
 
 
-### Step 3: Add Users
+### Step 4: Add Users
 
 Add User Accounts:
 ```
@@ -127,7 +127,7 @@ Meteor.userId();
 ```
 
 
-### Step 4: Make A Collection
+### Step 5: Make A Collection
 
 Create a folder called `lib`. Put a file inside called `collections.js` with the following contents:
 
@@ -208,7 +208,7 @@ Template.home.events({
 });
 ```
 
-### Step 5 Materialize
+### Step 6: Materialize
 
 To get materialize setup add these lines to `.meteor/packages`:
 
@@ -542,7 +542,7 @@ import '../imports/ui/signin.js';
 
 Delete `imports/startup/accounts-config.js`
 
-###Step 6: Deploy!
+###Step 7: Deploy!
 
 Deploy To Heroku
 
