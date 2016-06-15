@@ -26,13 +26,38 @@ Visit: http://localhost:3000/
 
 Replace existing content with the following:
 
+
+```html
+<!-- client/main.html -->
+<head>
+  <title>A Simple Meteor Chat App</title>
+</head>
+
+```
+
 ```javascript
-// main.js
+// client/main.js
+import '../imports/ui/home.js';
+```
 
-import { Template } from 'meteor/templating';
-import { ReactiveVar } from 'meteor/reactive-var';
+Create a new folder called imports. Inside "imports", create a folder called "ui".
 
-import './main.html';
+```html
+<!-- imports/ui/home.html -->
+<body>
+  {{> home}}
+</body>
+
+<template name="home">
+  <p>There is content here</p>
+</template>
+```
+
+```javascript
+//imports/ui/home.js
+
+import './home.html';
+
 
 Template.home.onCreated(function homeOnCreated() {
 
@@ -45,9 +70,16 @@ Template.home.helpers({
 Template.home.events({
 
 });
-
 ```
 
+
+
+### Step 3: Add Users
+
+Add User Accounts:
+```
+meteor add accounts-ui accounts-password
+```
 
 ```html
 <!-- main.html -->
@@ -57,11 +89,16 @@ Template.home.events({
 </head>
 
 <body>
+  {{> loginButtons}}
   {{> home}}
 </body>
 
 <template name="home">
-
+  <p>There is content here</p>
 </template>
+
+```
+
+Configure accounts-ui:
 
 ```
