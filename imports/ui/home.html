@@ -4,5 +4,17 @@
 </body>
 
 <template name="home">
-  <p>There is content here</p>
+  <h1>Current Messages</h1>
+  <ul id="message-container">
+    {{#each message}}
+      <li>{{this.user.username}} - {{this.text}}</li>
+    {{/each}}
+  </ul>
+  {{#if userLoggedIn}}
+  <h2>Create a message</h2>
+    <form id="new-msg">
+      <input name="message" type="text">
+      <button>Submit</button>
+    </form>
+  {{/if}}
 </template>

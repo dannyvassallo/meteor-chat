@@ -127,3 +127,83 @@ Meteor.userId();
 ```
 
 
+### Step 4: Make A Collection
+
+Create a folder called `lib`. Put a file inside called `collections.js` with the following contents:
+
+```javascript
+Message = new Mongo.Collection('messages');
+```
+
+Create a file called `methods` in the server folder
+
+```javascript
+//server/methods.js
+Meteor.methods({
+    'insertMessage': function(text){
+        Message.insert({
+            text: text,
+            user: Meteor.user(),
+            created_on: new Date().getTime()
+        });
+    }
+});
+```
+Add the form to the page:
+
+```html
+<!-- imports/ui/home.html -->
+<body>
+  {{> loginButtons}}
+  {{> home}}
+</body>
+
+<template name="home">
+  <h1>Current Messages</h1>
+  <ul id="message-container">
+    {{#each message}}
+      <li>{{this.user.username}} - {{this.text}}</li>
+    {{/each}}
+  </ul>
+  {{#if userLoggedIn}}
+  <h2>Create a message</h2>
+    <form id="new-msg">
+      <input name="message" type="text">
+      <button>Submit</button>
+    </form>
+  {{/if}}
+</template>
+```
+
+Setup events and helpers:
+
+```javascript
+//imports/ui/home.js
+import { Meteor } from 'meteor/meteor';
+
+import './home.html';
+
+Template.home.onRendered(function() {
+  console.log('created');
+});
+
+Template.home.helpers({
+  'message' : function(){
+    return Message.find({}, {sort: {created_on: -1}, limit: 10}).fetch().reverse();
+  },
+  'userLoggedIn': function(){
+    return Meteor.user();
+  }
+});
+
+Template.home.events({
+  "submit #new-msg": function(e){
+    e.preventDefault();
+    var message = $("[name='message']").val();
+    Meteor.call('insertMessage', message);
+    setTimeout(function(){
+      $("[name='message']").val('');
+    }, 100);
+  }
+});
+```
