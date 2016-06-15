@@ -24,6 +24,8 @@ Visit: http://localhost:3000/
 
 ### Step 2: Strip Out Boilerplate
 
+Replace existing content with the following:
+
 ```javascript
 // main.js
 
