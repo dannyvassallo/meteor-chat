@@ -1,20 +1,26 @@
-<body>
-  {{> loginButtons}}
-  {{> home}}
-</body>
-
 <template name="home">
-  <h1>Current Messages</h1>
-  <ul id="message-container">
-    {{#each message}}
-      <li>{{this.user.username}} - {{this.text}}</li>
-    {{/each}}
-  </ul>
-  {{#if userLoggedIn}}
-  <h2>Create a message</h2>
-    <form id="new-msg">
-      <input name="message" type="text">
-      <button>Submit</button>
-    </form>
-  {{/if}}
+  <div class="container">
+    <div class="row">
+      <div class="col s12">
+        <h1>Current Messages</h1>
+        <ul id="message-container">
+          {{#each message}}
+            <li>{{this.user.username}} - {{this.text}}</li>
+          {{/each}}
+        </ul>
+        {{#if userLoggedIn}}
+        <h2>Create a message</h2>
+          <form id="new-msg">
+            <div class="input-field col s8">
+              <input name="message" type="text">
+              <label for="message">Message</label>
+            </div>
+            <div class="input-field col s4">
+              <button class="btn-large grey darken-4">Submit</button>
+            </div>
+          </form>
+        {{/if}}
+      </div>
+    </div>
+  </div>
 </template>
