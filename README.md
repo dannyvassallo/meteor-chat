@@ -217,6 +217,11 @@ fourseven:scss
 poetic:materialize-scss
 ```
 
+Add this line to your `client/main.html`
+```
+     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+     ```
+
 Rename `client/main.css` to `client/main.scss`
 
 Add these contents:
