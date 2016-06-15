@@ -121,9 +121,9 @@ import { Meteor } from 'meteor/meteor';
 
 
 Create a user and open the console:
-```
+```javascript
 Meteor.userId();
 //should return => "J8iYQwkZiKxe9pTLt"
-``
+```
 
 
