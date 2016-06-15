@@ -82,12 +82,7 @@ meteor add accounts-ui accounts-password
 ```
 
 ```html
-<!-- main.html -->
-
-<head>
-  <title>A Simple Meteor Chat App</title>
-</head>
-
+<!-- imports/ui/home.html -->
 <body>
   {{> loginButtons}}
   {{> home}}
@@ -101,4 +96,34 @@ meteor add accounts-ui accounts-password
 
 Configure accounts-ui:
 
+
+Create a file `imports/startup/accounts-config.js`
+
+```javascript
+//imports/startup/accounts-config.js
+import { Accounts } from 'meteor/accounts-base';
+
+Accounts.ui.config({
+  passwordSignupFields: 'USERNAME_ONLY',
+});
 ```
+
+```javascript
+//client/main.js
+import '../imports/startup/accounts-config.js';
+import '../imports/ui/home.js';
+```
+
+```javascript
+//imports/ui/body.js:line1
+import { Meteor } from 'meteor/meteor';
+```
+
+
+Create a user and open the console:
+```
+Meteor.userId();
+//should return => "J8iYQwkZiKxe9pTLt"
+``
+
+
