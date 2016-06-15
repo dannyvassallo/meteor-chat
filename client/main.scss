@@ -1,0 +1,23 @@
+/* CSS declarations go here */
+@import "{poetic:materialize-scss}/sass/components/_color.scss";
+$primary-color: color("grey", "darken-4");
+
+@import "{poetic:materialize-scss}/sass/materialize.scss";
+
+main{
+  padding-top: 50px;
+}
+
+.full-w{
+  width: 100%;
+}
+
+body {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
+
+main {
+  flex: 1 0 auto;
+}

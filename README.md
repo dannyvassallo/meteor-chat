@@ -207,3 +207,332 @@ Template.home.events({
   }
 });
 ```
+
+### Step 5 Materialize
+
+To get materialize setup add these lines to `.meteor/packages`:
+
+```javascript
+fourseven:scss
+poetic:materialize-scss
+```
+
+Rename `client/main.css` to `client/main.scss`
+
+Add these contents:
+
+```scss
+@import "{poetic:materialize-scss}/sass/components/_color.scss";
+$primary-color: color("grey", "darken-4");
+
+@import "{poetic:materialize-scss}/sass/materialize.scss";
+
+main{
+  padding-top: 50px;
+}
+
+.full-w{
+  width: 100%;
+}
+```
+
+Remove accounts-ui
+
+```
+meteor remove accounts-ui
+```
+
+Add meteor user accounts and ironrouter to your `.meteor/packages` file.
+```
+iron:router
+useraccounts:materialize
+useraccounts:core
+useraccounts:iron-routing
+```
+
+Create your routes:
+
+```javascript
+//lib/router.js
+
+Router.configure({
+  layoutTemplate: 'masterLayout',
+  yieldTemplates: {
+      navbar: {to: 'navbar'},
+      footer: {to: 'footer'},
+  }
+});
+
+Router.map(function(){
+  this.route('/', {
+    path: '/',
+    template: 'home',
+    layoutTemplate: 'masterLayout',
+  });
+  // Sign In Route
+  AccountsTemplates.configureRoute('signIn', {
+      name: 'signIn',
+      path: '/sign-in',
+      template: 'signIn',
+      layoutTemplate: 'masterLayout',
+      redirect: '/',
+  });
+  // Sign Up Route
+  AccountsTemplates.configureRoute('signUp', {
+      name: 'signUp',
+      path: '/sign-up',
+      template: 'signUp',
+      layoutTemplate: 'masterLayout',
+      redirect: '/',
+  });
+  // Sign Out Route
+  this.route('/sign-out', function(){
+      Meteor.logout(function(err) {
+          if (err) alert('There was a problem logging you out.');
+          Router.go("/");
+      });
+      Router.go("/");
+  });
+  // adjust user fields
+  AccountsTemplates.removeField('email');
+  var pwd = AccountsTemplates.removeField('password');
+  AccountsTemplates.addFields([
+    {
+        _id: "username",
+        type: "text",
+        displayName: "username",
+        required: true,
+        minLength: 5,
+    },
+  ]);
+  AccountsTemplates.addField(pwd);
+});
+
+```
+
+Create a layout folder in `client/layouts`
+
+Create your master layout:
+
+```html
+<!-- client/layouts/master_layout -->
+<template name="masterLayout">
+  {{> yield region='navbar'}}
+    <main>
+      {{> yield}}
+    </main>
+  {{> yield region='footer'}}
+</template>
+```
+
+Create your partials for materialize:
+
+Navbar:
+
+```javascript
+//imports/ui/navbar.js
+import { Meteor } from 'meteor/meteor';
+
+import './navbar.html';
+
+Template.navbar.onRendered(function() {
+  console.log('created');
+  $(".button-collapse").sideNav();
+});
+
+Template.navbar.helpers({
+  'userLoggedIn': function(){
+    return Meteor.user();
+  }
+});
+```
+
+```html
+<!-- imports/ui/navbar.html -->
+<template name="navbar">
+  <nav>
+    <div class="container">
+      <div class="row">
+        <div class="col s12">
+          <div class="nav-wrapper">
+            <a href="/" class="brand-logo">Logo</a>
+            <a href="#" data-activates="mobile-nav" class="button-collapse"><i class="material-icons">menu</i></a>
+            <ul class="right hide-on-med-and-down">
+              {{#if userLoggedIn}}
+                <li><a href="/sign-out">Sign Out</a></li>
+              {{else}}
+                <li><a href="/sign-in">Sign In / Up</a></li>
+              {{/if}}
+            </ul>
+            <ul class="side-nav" id="mobile-nav">
+              {{#if userLoggedIn}}
+                <li><a href="/sign-out">Sign Out</a></li>
+              {{else}}
+                <li><a href="/sign-in">Sign In / Up</a></li>
+              {{/if}}
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+</template>
+
+```
+
+Footer:
+
+```javascript
+//imports/ui/footer.js
+import { Meteor } from 'meteor/meteor';
+
+import './footer.html';
+
+Template.footer.onRendered(function() {
+  console.log('created');
+});
+```
+
+```html
+<!-- imports/ui/footer.html -->
+<template name="footer">
+  <footer class="page-footer">
+    <div class="container">
+      <div class="row">
+        <div class="col l6 s12">
+          <h5 class="white-text">Footer Content</h5>
+          <p class="grey-text text-lighten-4">You can use rows and columns here to organize your footer content.</p>
+        </div>
+        <div class="col l4 offset-l2 s12">
+          <h5 class="white-text">Links</h5>
+          <ul>
+            <li><a class="grey-text text-lighten-3" href="#!">Link 1</a></li>
+            <li><a class="grey-text text-lighten-3" href="#!">Link 2</a></li>
+            <li><a class="grey-text text-lighten-3" href="#!">Link 3</a></li>
+            <li><a class="grey-text text-lighten-3" href="#!">Link 4</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-copyright">
+      <div class="container">
+      © 2014 Copyright Text
+      <a class="grey-text text-lighten-4 right" href="#!">More Links</a>
+      </div>
+    </div>
+  </footer>
+</template>
+
+```
+
+
+Sign in:
+
+```javascript
+//imports/ui/signin.js
+import { Meteor } from 'meteor/meteor';
+
+import './signin.html';
+
+Template.signIn.onRendered(function() {
+  console.log('created');
+});
+
+Template.signIn.events({
+  'click #at-signUp': function(){
+    Router.go('sign-up');
+  }
+});
+```
+
+```html
+<!-- imports/ui/signin.html -->
+<template name="signIn">
+  <main class="signinbody">
+    <div class="container">
+      <div class="row row-pad">
+        <div class="col s12 m6 offset-m3 l6 offset-l3 white z-depth-1 login">
+          {{> atForm state='signIn'}}
+        </div>
+      </div>
+    </div>
+  </main>
+</template>
+```
+
+Sign up:
+
+```javascript
+//imports/ui/signup.js
+import { Meteor } from 'meteor/meteor';
+
+import './signup.html';
+
+Template.signUp.onRendered(function() {
+  console.log('created');
+});
+
+Template.signUp.events({
+  'click #at-signIn': function(){
+    Router.go('signin');
+  }
+});
+```
+
+```html
+<!-- imports/ui/signup.html -->
+<template name="signUp">
+  <main class="registerbody">
+    <div class="container">
+      <div class="row">
+        <div class="col s12 m6 offset-m3 l6 offset-l3 white z-depth-1 login">
+          {{> atForm state='signUp'}}
+        </div>
+      </div>
+    </div>
+  </main>
+</template>
+```
+
+Refactor Home:
+
+```html
+<template name="home">
+  <div class="container">
+    <div class="row">
+      <div class="col s12">
+        <h1>Current Messages</h1>
+        <ul id="message-container">
+          {{#each message}}
+            <li>{{this.user.username}} - {{this.text}}</li>
+          {{/each}}
+        </ul>
+        {{#if userLoggedIn}}
+        <h2>Create a message</h2>
+          <form id="new-msg">
+            <div class="input-field col s8">
+              <input name="message" type="text">
+              <label for="message">Message</label>
+            </div>
+            <div class="input-field col s4">
+              <button class="btn-large grey darken-4">Submit</button>
+            </div>
+          </form>
+        {{/if}}
+      </div>
+    </div>
+  </div>
+</template>
+```
+
+Add Imports to `client/main.js`
+
+```
+import '../imports/ui/footer.js';
+import '../imports/ui/navbar.js';
+import '../imports/ui/home.js';
+import '../imports/ui/signup.js';
+import '../imports/ui/signin.js';
+```
+
+Delete `imports/startup/accounts-config.js`
