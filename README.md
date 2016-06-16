@@ -336,6 +336,7 @@ Navbar:
 
 ```javascript
 //imports/ui/navbar.js
+import { Template } from 'meteor/templating'
 import { Meteor } from 'meteor/meteor';
 
 import './navbar.html';
@@ -389,6 +390,7 @@ Footer:
 
 ```javascript
 //imports/ui/footer.js
+import { Template } from 'meteor/templating'
 import { Meteor } from 'meteor/meteor';
 
 import './footer.html';
@@ -435,6 +437,7 @@ Sign in:
 
 ```javascript
 //imports/ui/signin.js
+import { Template } from 'meteor/templating'
 import { Meteor } from 'meteor/meteor';
 
 import './signin.html';
@@ -469,6 +472,7 @@ Sign up:
 
 ```javascript
 //imports/ui/signup.js
+import { Template } from 'meteor/templating'
 import { Meteor } from 'meteor/meteor';
 
 import './signup.html';
